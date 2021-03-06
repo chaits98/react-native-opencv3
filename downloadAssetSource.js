@@ -20,6 +20,11 @@ function getFilename(source_uri) {
 async function downloadAssetSource(uri) {
   return new Promise((resolve, reject) => {
     const filename = getFilename(uri)
+    let isLocalFile = RNFS.exists(uri);
+    if (isLocalFile) {
+      resolve(uri);
+      return;
+    }    
 
     RNFS.exists(filename)
     .then((itExists) => {
