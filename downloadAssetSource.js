@@ -1,5 +1,5 @@
 var RNFS = require('react-native-fs')
-import { v4 as uuidv4 } from 'uuid';
+import UUIDGenerator from 'react-native-uuid-generator';
 
 function getFilename(source_uri) {
   let filePortion = ''
@@ -23,50 +23,53 @@ async function downloadAssetSource(uri) {
     const filename = getFilename(uri)
     let isLocalFile = RNFS.exists(uri);
     if (isLocalFile) {
-      const cachePath = `${RNFS.CachesDirectoryPath}/${uuidv4()}.${filename.split('.').pop()}`;
-      RNFS.copyFile(uri, cachePath)
-      .then(() => {
-        resolve(cachePath);
+      UUIDGenerator.getRandomUUID((uuid) => {
+        const cachePath = `${RNFS.CachesDirectoryPath}/${uuid}.${filename.split('.').pop()}`;
+        RNFS.copyFile(uri, cachePath)
+          .then(() => {
+            resolve(cachePath);
+          })
+          .catch(err => console.error(err))
       })
-      .catch(err => console.error(err))
+      .catch(err => console.error(err));
       return;
-    }    
+    }
 
     RNFS.exists(filename)
-    .then((itExists) => {
-      if (itExists) {
-        RNFS.unlink(filename)
-        .then(() => {})
-        .catch((err) => {
-          console.error(err)
-          reject('Unable to unlink file at: ' + filename)
+      .then((itExists) => {
+        if (itExists) {
+          RNFS.unlink(filename)
+            .then(() => { })
+            .catch((err) => {
+              console.error(err)
+              reject('Unable to unlink file at: ' + filename)
+            })
+        }
+
+        const ret = RNFS.downloadFile({
+          fromUrl: uri,
+          toFile: filename
         })
-      }
 
-      const ret = RNFS.downloadFile({
-        fromUrl: uri,
-        toFile: filename
-      })
+        ret.promise.then((res) => {
+          console.log('statusCode is: ' + res.statusCode)
+          if (res.statusCode === 200) {
+            resolve(filename)
+          }
+          else {
+            reject('File at ' + filename + ' not downloaded.  Status code: ' + ret.statusCode)
+          }
+        })
+          .catch((err) => {
+            console.error(err)
+            reject('File at ' + filename + ' not downloaded')
+          })
 
-      ret.promise.then((res) => {
-        console.log('statusCode is: ' + res.statusCode)
-        if (res.statusCode === 200) {
-          resolve(filename)
-        }
-        else {
-          reject('File at ' + filename + ' not downloaded.  Status code: ' + ret.statusCode)
-        }
       })
       .catch((err) => {
         console.error(err)
         reject('File at ' + filename + ' not downloaded')
       })
-
-    })
-    .catch((err) => {
-      console.error(err)
-      reject('File at ' + filename + ' not downloaded')
-    })
   })
 }
 
