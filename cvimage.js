@@ -20,6 +20,8 @@ export class CvImage extends Component {
     super(props)
     this.resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource')
     this.state = { 'destFile' : '' }
+
+    if (typeof props.ref === 'function') props.ref(this);
   }
 
   componentDidMount = () => {
@@ -81,6 +83,10 @@ export class CvImage extends Component {
     .catch((err) => {
       console.error(err)
     })
+  }
+
+  getConvertedImageUri() {
+    return this.state.destFile;
   }
 
   render() {

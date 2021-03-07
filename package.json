@@ -25,7 +25,9 @@
     "name": "Adam G. Freeman"
   },
   "bundleDependencies": false,
-  "dependencies": {},
+  "dependencies": {
+    "uuid": "^8.3.2"
+  },
   "deprecated": false,
   "description": "OpenCV+contrib ported to React-Native for both iOS (v3.4.1) and Android (v3.4.4)",
   "keywords": [

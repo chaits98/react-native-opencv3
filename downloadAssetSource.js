@@ -1,4 +1,5 @@
 var RNFS = require('react-native-fs')
+import { v4 as uuidv4 } from 'uuid';
 
 function getFilename(source_uri) {
   let filePortion = ''
@@ -22,7 +23,12 @@ async function downloadAssetSource(uri) {
     const filename = getFilename(uri)
     let isLocalFile = RNFS.exists(uri);
     if (isLocalFile) {
-      resolve(uri);
+      const cachePath = `${RNFS.CachesDirectoryPath}/${uuidv4()}.${filename.split('.').pop()}`;
+      RNFS.copyFile(uri, cachePath)
+      .then(() => {
+        resolve(cachePath);
+      })
+      .catch(err => console.error(err))
       return;
     }    
 
