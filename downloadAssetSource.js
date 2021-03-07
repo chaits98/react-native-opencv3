@@ -1,5 +1,5 @@
 var RNFS = require('react-native-fs')
-import { getRandomUUID } from 'react-native-uuid-generator';
+import UUIDGenerator from 'react-native-uuid-generator';
 
 function getFilename(source_uri) {
   let filePortion = ''
@@ -23,7 +23,7 @@ async function downloadAssetSource(uri) {
     const filename = getFilename(uri)
     let isLocalFile = RNFS.exists(uri);
     if (isLocalFile) {
-      getRandomUUID((uuid) => {
+      UUIDGenerator.getRandomUUID((uuid) => {
         const cachePath = `${RNFS.CachesDirectoryPath}/${uuid}.${filename.split('.').pop()}`;
         RNFS.copyFile(uri, cachePath)
           .then(() => {
