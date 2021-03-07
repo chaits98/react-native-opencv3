@@ -30,8 +30,7 @@ async function downloadAssetSource(uri) {
             resolve(cachePath);
           })
           .catch(err => console.error(err))
-      })
-      .catch(err => console.error(err));
+      });
       return;
     }
 
