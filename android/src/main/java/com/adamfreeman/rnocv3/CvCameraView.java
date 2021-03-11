@@ -36,8 +36,6 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
 import org.opencv.objdetect.CascadeClassifier;
 import org.opencv.objdetect.Objdetect;
-import org.opencv.face.Face;
-import org.opencv.face.Facemark;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -144,7 +142,7 @@ public class CvCameraView extends JavaCameraView implements CvCameraViewListener
     private CascadeClassifier      mNoseClassifier;
     private CascadeClassifier      mMouthClassifier;
     private boolean                mSuckUpFrames;
-    private Facemark               mLandmarks;
+//    private Facemark               mLandmarks;
 
     private static final Scalar    FACE_RECT_COLOR     = new Scalar(255, 255, 0, 255);
     private boolean                mUseLandmarks       = false;
@@ -306,8 +304,8 @@ public class CvCameraView extends JavaCameraView implements CvCameraViewListener
         mUseLandmarks = true;
         File landmarksFile = readClassifierFile(landmarksModel + ".yaml");
         // setup landmarks detector
-        mLandmarks = Face.createFacemarkLBF();
-        mLandmarks.loadModel(landmarksFile.getAbsolutePath());
+//        mLandmarks = Face.createFacemarkLBF();
+//        mLandmarks.loadModel(landmarksFile.getAbsolutePath());
     }
 
     public void setCascadeClassifier(String cascadeClassifier, whichOne classifierType) {
@@ -499,7 +497,7 @@ public class CvCameraView extends JavaCameraView implements CvCameraViewListener
                 if (mUseLandmarks) {
                     // more sensitive if determining landmarks
                     mFaceClassifier.detectMultiScale(ingray, faces, 1.3, 5, 0|Objdetect.CASCADE_SCALE_IMAGE, new Size(mAbsoluteFaceSize, mAbsoluteFaceSize), new Size());
-                    mLandmarks.fit(ingray, faces, landmarks);
+//                    mLandmarks.fit(ingray, faces, landmarks);
                     if (landmarks.size() > 0) {
                         landmarksFound = true;
                     }
