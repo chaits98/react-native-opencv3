@@ -45,6 +45,7 @@ class CvInvoke {
 		retExcs.put("bitwise_not",new int[]{1,3});
 		retExcs.put("bitwise_or",new int[]{2,4});
 		retExcs.put("bitwise_xor",new int[]{2,4});
+        retExcs.put("threshold",new int[]{1,5});
 		retExcs.put("connectedComponents",new int[]{0,2}); 		
 		retExcs.put("connectedComponentsWithAlgorithm",new int[]{0,5}); 
 		retExcs.put("connectedComponentsWithStatsWithAlgorithm",new int[]{0,7}); 
